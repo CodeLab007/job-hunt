@@ -50,7 +50,7 @@ jobs:
         run: npm install
 
       - name: Build docker image
-        run: docker build ./client -t shumaslaghari/job-hunt-client:latest
+        run: docker build . -t shumaslaghari/job-hunt-client:latest
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -70,5 +70,5 @@ jobs:
         run: docker pull shumaslaghari/job-hunt-client:latest
       - name: Run the container
         run: |
-          docker-compose pull client
-          docker-compose up -d client
+          docker-compose -f docker-compose.prod.yml pull client
+          docker-compose up -f docker-compose.prod.yml -d client

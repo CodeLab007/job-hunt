@@ -5,6 +5,7 @@ services:
   # Client / Frontend service
   client:
     # Path for frontend image relative to docker-compose file
+    # build: ./
     image: shumaslaghari/job-hunt-client:latest
     # Ports to bind
     # '{exposed_port}:{internal_port}'
