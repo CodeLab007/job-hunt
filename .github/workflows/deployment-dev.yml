@@ -15,7 +15,6 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment: testing
     container:
       image: node:18
     steps:
@@ -67,7 +66,7 @@ jobs:
       - name: Connect to droplet via ssh
         run: doctl compute ssh job-hunt-y9aZL06EXfOX
       - name: Pull From Dockerhub
-      - run: docker pull shumaslaghari/job-hunt-client:latest
+        run: docker pull shumaslaghari/job-hunt-client:latest
       - name: Run the container
         run: |
           docker-compose pull client
