@@ -5,17 +5,19 @@ services:
   # Client / Frontend service
   client:
     # Path for frontend image relative to docker-compose file
-    image: shumaslaghari/job-hunt-client:latest
-    # build: ./
+    # image: shumaslaghari/job-hunt-client:latest
+    build: ./
     # Ports to bind
     # '{exposed_port}:{internal_port}'
+    stdin_open: true
+    tty: true
     ports:
       - "3000:3000"
     # Bind mount for live changes
-    volumes:
+    # volumes:
       # bind mount to over write content of container folder with out host folder (to reflect changes immediately)
-      - ./client:/app
+      # - ./:/app
       # This will ensure we exclude node_modules from being over written by the bind mount
-      - /app/node_modules
+      # - /app/node_modules
 
 

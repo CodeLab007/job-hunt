@@ -45,21 +45,21 @@ jobs:
           path: node_modules
           key: ${{ env.CACHE_KEY }}-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm install
+      # - name: Install dependencies
+      #   if: steps.cache.outputs.cache-hit != 'true'
+      #   run: npm install
 
-      - name: Build docker image
-        run: docker build . -t shumaslaghari/job-hunt-client:latest
+      # - name: Build docker image
+      #   run: docker build . -t shumaslaghari/job-hunt-client:latest
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # - name: Login to Docker Hub
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push to Dockerhub
-        run: docker push shumaslaghari/job-hunt-client
+      # - name: Push to Dockerhub
+      #   run: docker push shumaslaghari/job-hunt-client
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
@@ -69,6 +69,8 @@ jobs:
       - name: Pull From Dockerhub
         run: docker pull shumaslaghari/job-hunt-client:latest
       - name: Run the container
+        # run: |
+        #   docker-compose -f docker-compose.prod.yml pull client
+        #   docker-compose up -f docker-compose.prod.yml -d client
         run: |
-          docker-compose -f docker-compose.prod.yml pull client
-          docker-compose up -f docker-compose.prod.yml -d client
+          docker-compose up -f docker-compose.yml -d client

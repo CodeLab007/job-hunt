@@ -7,15 +7,16 @@ FROM node:18-alpine as base
 WORKDIR /app
 
 # Copy package.json seperately to only install deps if package.json changes
-COPY ./package.json ./package.json
-COPY tsconfig.json ./
+COPY  ./package*.json ./
+COPY ./tsconfig.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install 
 
 # Copy complete project to working directory
 COPY . .
 
+EXPOSE 3000
 
 # Dev
 # FROM base as dev
@@ -27,19 +28,8 @@ COPY . .
 
 
 # Prod
-FROM base as build
+FROM base as prod
 
 RUN npm run build
 
-FROM nginx:stable-alpine
-
-EXPOSE 80
-
-# Move all build files to NGINX serve folder
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Setup NGINX with config
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-
-
-
+CMD [ "npm","run","start" ]
