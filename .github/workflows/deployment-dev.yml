@@ -1,0 +1,74 @@
+# Name of the workflow
+name: Deployment
+# Events which should trigger this workflow
+on:
+  # When pushed to dev branch
+
+  push:
+    branches: [dev]
+  # Allow manual trigger of the workflow
+  workflow_dispatch:
+
+env:
+  CACHE_KEY: node-deps
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    environment: testing
+    container:
+      image: node:18
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ env.CACHE_KEY }}-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Test code
+        run: npm run test
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ env.CACHE_KEY }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Build docker image
+        run: docker build ./client -t shumaslaghari/job-hunt-client:latest
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push to Dockerhub
+        run: docker push shumaslaghari/job-hunt-client
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Connect to droplet via ssh
+        run: doctl compute ssh job-hunt-y9aZL06EXfOX
+      - name: Pull From Dockerhub
+      - run: docker pull shumaslaghari/job-hunt-client:latest
+      - name: Run the container
+        run: |
+          docker-compose pull client
+          docker-compose up -d client

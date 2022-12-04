@@ -1,0 +1,14 @@
+version: "3.8"
+
+# Defining the services
+services:
+  # Client / Frontend service
+  client:
+    # Path for frontend image relative to docker-compose file
+    image: shumaslaghari/job-hunt-client:latest
+    # Ports to bind
+    # '{exposed_port}:{internal_port}'
+    ports:
+      - "80:80"
+
+
