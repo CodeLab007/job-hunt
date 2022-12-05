@@ -60,17 +60,30 @@ jobs:
 
       # - name: Push to Dockerhub
       #   run: docker push shumaslaghari/job-hunt-client
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
+      # - name: Install doctl
+      #   uses: digitalocean/action-doctl@v2
+      #   with:
+      #     token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      # - name: Connect to droplet via ssh
+      # here i have to provide path to ssh private key but first i need to add the private key file
+      # run: doctl compute ssh job-hunt-y9aZL06EXfOX
+      # - name: Pull From Dockerhub
+      #   run: docker pull shumaslaghari/job-hunt-client:latest
+
+      - name: Connect to digital ocean via ssh and deploy
+        uses: appleboy/ssh-action@master
         with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      - name: Connect to droplet via ssh
-        run: doctl compute ssh job-hunt-y9aZL06EXfOX
-      - name: Pull From Dockerhub
-        run: docker pull shumaslaghari/job-hunt-client:latest
-      - name: Run the container
+          host: ${{secrets.DIGITALOCEAN_HOST}}
+          key: ${{secrets.DIGITALOCEAN_SSH_KEY}}
+          passphrase: ${{secrets.DIGITALOCEAN_SSH_PASSPHRASE}}
+
+          # 1) Pull the code from github
+          # 2) docker-compose up -f docker-compose.prod.yml
+          script: |
+
+      # - name: Run the container
         # run: |
         #   docker-compose -f docker-compose.prod.yml pull client
         #   docker-compose up -f docker-compose.prod.yml -d client
-        run: |
-          docker-compose up -f docker-compose.yml -d client
+        # run: |
+        #   docker-compose up -f docker-compose.yml -d client

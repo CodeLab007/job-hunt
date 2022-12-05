@@ -1,0 +1,63 @@
+
+
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1150px,
+  xxl: 1330px,
+);
+
+$grid-breakpoints: (
+  xs: 400px,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+);
+
+
+$spacer: 1rem;
+
+$spacers: map-merge(
+  (
+    0: 0,
+    1: (
+      $spacer * 0.25,
+    ),
+    2: (
+      $spacer * 0.5,
+    ),
+    3: $spacer,
+    4: (
+      $spacer * 1.5,
+    ),
+    5: (
+      $spacer * 3,
+    ),
+    6: (
+      $spacer * 4,
+    ),
+    7: (
+      $spacer * 5,
+    ),
+    8: (
+      $spacer * 6,
+    ),
+    9: (
+      $spacer * 7,
+    ),
+    10: (
+      $spacer * 10,
+    ),
+  ),
+  $spacers
+);
+
+
+$btn-padding-y: 1rem;
+$btn-padding-x: 2rem;
+$btn-font-family: $font-family-josefin;
+$btn-font-size: 1.0625rem;
+$btn-line-height: 1;
